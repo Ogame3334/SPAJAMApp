@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     private Vector2Int m_fieldSize = new Vector2Int(10, 10);
-    private BuildingInfo[,] m_buildingField;
+    private BuildingInfo[] m_buildingField;
 
     [SerializeField]
     private GameObject m_grassTile;
@@ -15,9 +15,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private GameObject m_roadTTile;
 
     [SerializeField]
+    private GameObject m_building;
+    [SerializeField]
     private GameObject[] m_buildings;
 
-    public BuildingInfo[,] BuildingField
+    public BuildingInfo[] BuildingField
     {
         get { return this.m_buildingField; }
     }
@@ -35,16 +37,16 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void Start()
     {
-        m_buildingField = new BuildingInfo[10, 10];
+        m_buildingField = new BuildingInfo[100];
 
         for (int y = 0; y < m_fieldSize.y; ++y)
         {
             for (int x = 0; x < m_fieldSize.x; ++x)
             {
-                m_buildingField[x, y] = new BuildingInfo( //fieldの初期化
+                m_buildingField[x + y * m_fieldSize.x] = new BuildingInfo( //fieldの初期化
                     x + y * m_fieldSize.x,
                     "",
-                    0,
+                    Random.Range(0, 12),
                     0,
                     0,
                     "",
@@ -92,8 +94,25 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                     }
                 }
                 { // 建物
+                    int buildingX = x - 1;
+                    int buildingY = y - y / 3 - 1;
+
+                    int zip = buildingX + buildingY * m_fieldSize.x;
                     if(!(x == 0 || x == m_fieldSize.x + 1) && y % 3 != 0){
-                        Instantiate(m_buildings[Random.Range(0, 12)], new Vector3(x * 20f, 0, y * 20f), Quaternion.Euler(0, (y % 3 == 1 ? 180f : 0), 0));
+                        BuildingInfo shouldBuilding = null;
+                        foreach (var buildingInfo in m_buildingField)
+                        {
+                            if(buildingInfo.zip == zip){
+                                shouldBuilding = buildingInfo;
+                                break;
+                            }
+                        }
+                        if(shouldBuilding == null) continue;
+
+
+                        var building = Instantiate(m_building, new Vector3(x * 20f, 0, y * 20f), Quaternion.Euler(0, y % 3 == 1 ? 180f : 0, 0));
+                        Instantiate(m_buildings[shouldBuilding.buildingId], building.transform);
+                        building.GetComponent<Building>().ThenChildInit(m_buildingField[zip]);
                         // Instantiate(m_buildings[m_buildingField[x - 1, y - (int)(y / 3) - 1].zip % 3], new Vector3(x * 20f, 0, y * 20f), Quaternion.Euler(0, (y % 3 == 1 ? 180f : 0), 0));
                     }
                 }
