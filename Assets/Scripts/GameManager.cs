@@ -39,7 +39,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         m_buildingField = new BuildingInfo[100];
 
-        for (int y = 0; y < m_fieldSize.y; ++y)
+        for (int y = 0; y < 3; ++y)
         {
             for (int x = 0; x < m_fieldSize.x; ++x)
             {
@@ -102,6 +102,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                         BuildingInfo shouldBuilding = null;
                         foreach (var buildingInfo in m_buildingField)
                         {
+                            if(buildingInfo == null) break;
                             if(buildingInfo.zip == zip){
                                 shouldBuilding = buildingInfo;
                                 break;

@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private Camera m_camera;
     [SerializeField]
+    private GameObject m_fukidashi;
+    private Fukidashi m_fukidashiClass;
+    [SerializeField]
     private float sensitivity;
     [SerializeField]
     private float magnitude;
@@ -95,6 +98,7 @@ public class CameraController : MonoBehaviour
                             selectingBuilding.OnReleased();
                         }
                         selectingBuilding = null;
+                        m_fukidashi.SetActive(false);
                     }
                     else{
                         // Debug.Log("touch building");
@@ -107,6 +111,8 @@ public class CameraController : MonoBehaviour
                                 selectingBuilding.OnReleased();
                             }
                             selectingBuilding = building;
+                            m_fukidashiClass.BuildingTopPos = building.TopPosition;
+                            m_fukidashi.SetActive(true);
                         }
                         else if(selectingBuilding.Zip != building.Zip){
                             
@@ -116,10 +122,13 @@ public class CameraController : MonoBehaviour
                                 selectingBuilding.OnReleased();
                             }
                             selectingBuilding = building;
+                            m_fukidashiClass.BuildingTopPos = building.TopPosition;
+                            m_fukidashi.SetActive(true);
                         }
                         else{
                             building.OnReleased();
                             selectingBuilding = null;
+                            m_fukidashi.SetActive(false);
                         }
                     }
                 }
@@ -129,7 +138,7 @@ public class CameraController : MonoBehaviour
         }
         else{
             rb.velocity = rb.velocity * magnitude;
-            if(rb.velocity.magnitude < 1e-2){
+            if(rb.velocity.magnitude < 0.1f){
                 rb.velocity = Vector3.zero;
             }
             prevTouchPhase = TouchPhase.Ended;
@@ -142,6 +151,9 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         nowCameraSize = m_camera.orthographicSize;
+        m_fukidashiClass = m_fukidashi.GetComponent<Fukidashi>();
+        m_fukidashiClass.CameraSize = nowCameraSize;
+        m_fukidashi.SetActive(false);
     }
 
     // Update is called once per frame

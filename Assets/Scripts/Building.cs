@@ -22,6 +22,11 @@ public class Building : MonoBehaviour
 
     private float m_timer = 0f;
 
+    public Vector3 TopPosition
+    {
+        get { return this.gameObject.transform.position + new Vector3(0, 40f, 0);}
+    }
+
     public int Zip
     {
         get {return this.m_buildingInfo.zip;}
