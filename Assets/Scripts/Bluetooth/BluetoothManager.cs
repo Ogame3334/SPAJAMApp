@@ -7,16 +7,15 @@ public class BluetoothManager : MonoBehaviour
     void Start()
     {
         // Android用Bluetoothパーミッションのリクエスト
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
             ActivityCompat.requestPermissions(this,
             arrayOf(
                 Manifest.permission.BLUETOOTH_SCAN,
                 Manifest.permission.BLUETOOTH_CONNECT,
                 Manifest.permission.BLUETOOTH_ADVERTISE),
             REQUEST_CODE_BLUETOOTH_PERMISSIONS
-        )} else if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
-        {
-            Permission.RequestUserPermission(Permission.FineLocation);
+        );
         }
         StartBluetoothScan();
     }
@@ -41,16 +40,5 @@ public class BluetoothManager : MonoBehaviour
         // すれ違った端末に基づき通知を表示する処理
         NotificationManager.Instance.ShowNotification("友人を検知しました！", "友人のデバイス: " + deviceName);
     }
-
-    public void OnDeviceDetected(string deviceName, string deviceAddress)
-{
-    Debug.Log("Device Detected: " + deviceName + " - " + deviceAddress);
-
-    // 友人のデバイスかどうかを確認
-    if (PlayerManager.Instance.IsFriendDevice(deviceAddress))
-    {
-        NotificationManager.Instance.ShowNotification("友人とすれ違いました", "友人: " + deviceName);
-    }
-}
 
 }
