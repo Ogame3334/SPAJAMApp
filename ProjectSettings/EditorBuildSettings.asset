@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SPAJAMApp.unity
     guid: b6ccb1026ac437a4391e84a3297cc970
+  - enabled: 1
+    path: Assets/Scenes/Chat.unity
+    guid: ee8393c3ef566454ba14b88d9714bf14
   m_configObjects:
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
       guid: 4b43198ea37d34f46b2077da0e197f47, type: 2}
