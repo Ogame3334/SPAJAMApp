@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class SendMessage : MonoBehaviour
 {
+    public FetchJson fetchJson;
     public TMP_InputField inputField;
+    public string id;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +19,7 @@ public class SendMessage : MonoBehaviour
     public void Send()
     {
         string message = inputField.text;
+        fetchJson.PostMessage(message, id);
         Debug.Log("Message: " + message);
     }
 }
