@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -33,13 +34,33 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         }
 
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy() {
+        SceneManager.sceneLoaded -= OnSceneLoaded;    
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        GenerateField();
     }
 
     void Start()
     {
+        // GameManager.Instance.GenerateField();
+    }
+
+    void Update()
+    {
+
+    }
+
+    public void GenerateField()
+    {
         m_buildingField = new BuildingInfo[100];
 
-        for (int y = 0; y < 3; ++y)
+        for (int y = 0; y < m_fieldSize.y; ++y)
         {
             for (int x = 0; x < m_fieldSize.x; ++x)
             {
@@ -83,10 +104,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                     {
                         Instantiate(m_roadStraightTile, new Vector3(x * 20f, 0, y * 20f), Quaternion.Euler(0, 90f, 0));
                     }
-                    // else
-                    // {
-                    //     // Instantiate(m_grassTile, new Vector3(x * 20f, 0, y * 20f), Quaternion.identity);
-                    // }
                 }
                 { // 草タイル
                     if(!(x == 0 || x == m_fieldSize.x + 1) && y % 3 != 0){
@@ -121,10 +138,4 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         }
     }
-
-    void Update()
-    {
-
-    }
-
 }
